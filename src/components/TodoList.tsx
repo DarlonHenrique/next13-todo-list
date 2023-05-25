@@ -1,5 +1,4 @@
 "use client"
-
 import type { Todo } from "@prisma/client"
 import { TodoItem } from "./TodoItem"
 import { useEffect, useState } from "react"
@@ -22,10 +21,7 @@ export function TodoList({ getTodos, deleteTodo, toggleTodo }: TodoListProps) {
     setTodos(todos.filter(todo => todo.id !== id))
   }
 
-
   return <ul>
-    {todos.map(todo => (
-      <TodoItem handleDeleteTodo={handleDeleteTodo} toggleTodo={toggleTodo} key={todo.id} {...todo} />
-    ))}
+    {todos.map(todo => <TodoItem handleDeleteTodo={handleDeleteTodo} toggleTodo={toggleTodo} key={todo.id} {...todo} />)}
   </ul>
 }
