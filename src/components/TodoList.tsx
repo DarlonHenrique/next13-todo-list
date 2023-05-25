@@ -23,7 +23,7 @@ export function TodoList({ getTodos, deleteTodo, toggleTodo }: TodoListProps) {
   }
 
 
-  return <ul className="pl-4">
+  return <ul>
     {todos.map(todo => (
       <TodoItem handleDeleteTodo={handleDeleteTodo} toggleTodo={toggleTodo} key={todo.id} {...todo} />
     ))}
