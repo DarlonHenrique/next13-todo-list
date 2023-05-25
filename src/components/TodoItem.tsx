@@ -12,7 +12,7 @@ type TodoItemProps = {
 
 export function TodoItem({ id, title, complete, toggleTodo, handleDeleteTodo }: TodoItemProps) {
   return (
-    <li className="bg-transparent border-primary border px-2 my-2 p-1 rounded-md flex gap-1 items-center justify-between container mx-auto">
+    <li className="bg-transparent border-primary border px-2 my-2 p-1 rounded flex gap-1 items-center justify-between container mx-auto">
       <div className="flex items-center gap-1">
         <input id={id} type="checkbox" className="peer cursor-pointer"
           defaultChecked={complete}
