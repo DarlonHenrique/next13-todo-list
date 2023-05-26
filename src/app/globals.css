@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.datepicker-input::-webkit-calendar-picker-indicator {
+  filter: invert(98%) sepia(30%) saturate(5403%) hue-rotate(199deg) brightness(129%) contrast(87%);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.datepicker-input::-webkit-calendar-picker-indicator:hover {
+  background-color: rgba(255, 255, 255, 75%);
+  border-radius: 100%;
+}
