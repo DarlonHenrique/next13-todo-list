@@ -29,7 +29,7 @@ export default async function Home() {
   return (
     <>
       <header className="flex justify-between mb-4 items-center"> 
-        <h1 className="text-2xl">Todos</h1>
+        <h1 className="text-2xl text-slate-50 font-bold">Todos</h1>
         <Link className="border border-primary px-2 py-1 rounded
         focus-within:bg-white focus-within:bg-opacity-10 hover:bg-white hover:bg-opacity-10 outline-none" href="/new">New</Link>
       </header>
