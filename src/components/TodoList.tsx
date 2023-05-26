@@ -14,7 +14,7 @@ export function TodoList({ getTodos, deleteTodo, toggleTodo }: TodoListProps) {
 
   useEffect(() => {
     getTodos().then(todos => setTodos(todos))
-  }, [])
+  }, [getTodos])
 
   async function handleDeleteTodo(id: string) {
     deleteTodo(id)
