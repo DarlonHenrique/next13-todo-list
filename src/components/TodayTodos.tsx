@@ -3,6 +3,7 @@ import { ChevronLeft } from "../../public/icons/chevron-left"
 import { ChevronRight } from "../../public/icons/chevron-right"
 import { useMemo, useState } from "react"
 import { TodoItem } from "./TodoItem"
+import { Calendar } from "./Calendar"
 
 interface TodayTodosProps {
   todos: Todo[],
@@ -12,6 +13,7 @@ interface TodayTodosProps {
 
 export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosProps) {
   const [todayDate, setTodayDate] = useState<Date>(new Date())
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
   const todayTodos = useMemo(() => {
     return todos.filter(todo => {
       const todoDate = new Date(todo.dueDate);
@@ -36,13 +38,20 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
     setTodayDate(prevDay);
   }
 
+  function handleClickDate() {
+    setIsCalendarOpen(!isCalendarOpen)
+  }
+
   return (
     <div className="flex items-center justify-center container mx-auto flex-col mt-4">
       <section className="flex justify-between w-full items-center">
         <button onClick={handlePrevDay} className="hover:bg-white focus-within:bg-white hover:bg-opacity-10 focus-within:bg-opacity-10 p-1.5 rounded-full shadow">
           <ChevronLeft className='h-6 w-6' />
         </button>
-        <span className="font-semibold">{intlDateConverter.format(todayDate)}</span>
+        <div className="relative" >
+          <button onClick={handleClickDate} className="font-semibold">{intlDateConverter.format(todayDate)}</button>
+          {isCalendarOpen && <Calendar />}
+        </div>
         <button onClick={handleNextDay} className="hover:bg-white focus-within:bg-white hover:bg-opacity-10 focus-within:bg-opacity-10 p-1.5 rounded-full shadow">
           <ChevronRight className='h-6 w-6' />
         </button>
