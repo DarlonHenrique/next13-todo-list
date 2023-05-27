@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { ChevronLeft } from "../../public/icons/chevron-left"
 import { ChevronRight } from "../../public/icons/chevron-right"
 
@@ -23,8 +23,8 @@ export function Calendar() {
     },
     year: date.getFullYear()
   })
-  console.log(currentDate)
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const dayRef = useRef<HTMLButtonElement>(null)
 
   function handleNavigateMonth(direction: string) {
     const newYear = currentDate.month.number === 11 && direction === 'forward' ? currentDate.year + 1 : currentDate.month.number === 0 && direction === 'back' ? currentDate.year - 1 : currentDate.year
@@ -88,8 +88,22 @@ export function Calendar() {
 
   const daysWithStrings = generateArrayToRender(currentDate.month.daysInMonth as number)
 
+  function handleClickDay(event: React.MouseEvent<HTMLButtonElement>) {
+    const activeClass = ' bg-gray-800 border border-primary text-white'
+
+    // get all days by the ref and remove the active class
+    const days = dayRef.current?.parentElement?.children
+    if (!days) return
+    for (let index = 0; index < days?.length; index++) {
+      const element = days?.item(index);
+      element?.classList.remove('bg-gray-800', 'border', 'border-primary', 'text-white')
+    }
+
+    event.currentTarget.className += activeClass
+  }
+
   return (
-    <div className="absolute flex-col w-[350px] px-4 py-6 left-1/2 -translate-x-1/2 flex justify-center top-10 bg-background-secondary rounded">
+    <div className="absolute  flex-col w-[350px] px-4 py-6 left-1/2 -translate-x-1/2 flex justify-center top-10 bg-background-secondary rounded">
       <div className="flex justify-between mb-5 w-full items-center">
         <div className="flex items-center justify-between max-w-[120px] w-full">
           <button onClick={() => handleNavigateMonth('back')} className="hover:bg-white focus-within:bg-white hover:bg-opacity-10 focus-within:bg-opacity-10 rounded-full shadow">
@@ -106,7 +120,7 @@ export function Calendar() {
         {daysOfWeek.map(day => <span className="text-[12px] font-[500] text-[#A0AEC0]">{day}</span>)}
       </div>
       <div className="grid w-full h-[200px] grid-cols-7 place-items-center mt-2">
-        {daysWithStrings.map(day => <button className="flex justify-center items-center w-full h-full text-[12px] font-[500] text-[#A0AEC0]">{day}</button>)}
+        {daysWithStrings.map(day => <button onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
       </div>
     </div>
   )
