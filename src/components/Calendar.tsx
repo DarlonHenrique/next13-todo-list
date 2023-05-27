@@ -3,7 +3,8 @@ import { useRef, useState } from "react"
 import { ChevronLeft } from "../../public/icons/chevron-left"
 import { ChevronRight } from "../../public/icons/chevron-right"
 
-interface currentDate {
+export type currentDate = {
+  day: number,
   month: {
     name: string,
     number: number,
@@ -12,17 +13,15 @@ interface currentDate {
   year: number
 }
 
-export function Calendar() {
-  const date = new Date()
+interface CalendarProps {
+  currentDate: currentDate,
+  setCurrentDate: (currentDate: currentDate) => void,
+  setSelectedDate: (selectedDate: Date) => void,
+  setIsCalendarOpen: (isCalendarOpen: boolean) => void,
+  selectedDate: Date
+}
 
-  const [currentDate, setCurrentDate] = useState<currentDate>({
-    month: {
-      name: date.toLocaleString('en-US', { month: 'long' }),
-      number: date.getMonth(),
-      daysInMonth: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(),
-    },
-    year: date.getFullYear()
-  })
+export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCalendarOpen, selectedDate}: CalendarProps) {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const dayRef = useRef<HTMLButtonElement>(null)
 
@@ -31,6 +30,7 @@ export function Calendar() {
     const newMonth = direction === 'back' ? currentDate.month.number - 1 : currentDate.month.number + 1
     const newDate = new Date(newYear, newMonth, 1)
     setCurrentDate({
+      day: newDate.getDay(),
       month: {
         name: newDate.toLocaleString('en-US', { month: 'long' }),
         number: newDate.getMonth(),
@@ -100,7 +100,17 @@ export function Calendar() {
     }
 
     event.currentTarget.className += activeClass
+    const day = event.currentTarget.textContent
+    const month = currentDate.month.number + 1
+    const year = currentDate.year
+    const date = new Date(`${month}/${day}/${year}`)
+    setSelectedDate(date)
+    setIsCalendarOpen(false)
   }
+
+  const sameMonthAndYear = selectedDate.getMonth() === currentDate.month.number && selectedDate.getFullYear() === currentDate.year 
+  console.log(sameMonthAndYear)
+  console.log(selectedDate.getUTCDate())
 
   return (
     <div className="absolute  flex-col w-[350px] px-4 py-6 left-1/2 -translate-x-1/2 flex justify-center top-10 bg-background-secondary rounded">
@@ -120,7 +130,7 @@ export function Calendar() {
         {daysOfWeek.map(weekDay => <span key={weekDay} className="text-[12px] font-[500] text-[#A0AEC0]">{weekDay}</span>)}
       </div>
       <div className="grid w-full h-[200px] grid-cols-7 place-items-center mt-2">
-        {daysWithStrings.map(day => <button key={day} onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
+        {daysWithStrings.map(day => <button key={day} onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} ${sameMonthAndYear && selectedDate.getUTCDate() === day && 'bg-gray-800 border border-primary text-white'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
       </div>
     </div>
   )

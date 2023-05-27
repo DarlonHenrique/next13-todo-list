@@ -3,7 +3,7 @@ import { ChevronLeft } from "../../public/icons/chevron-left"
 import { ChevronRight } from "../../public/icons/chevron-right"
 import { useMemo, useState } from "react"
 import { TodoItem } from "./TodoItem"
-import { Calendar } from "./Calendar"
+import { Calendar, currentDate } from "./Calendar"
 
 interface TodayTodosProps {
   todos: Todo[],
@@ -12,15 +12,24 @@ interface TodayTodosProps {
 }
 
 export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosProps) {
-  const [todayDate, setTodayDate] = useState<Date>(new Date())
+  const date = new Date()
+  const [selectedDate, setSelectedDate] = useState<Date>(date)
+  const [currentDate, setCurrentDate] = useState<currentDate>({
+    day: date.getUTCDate(),
+    month: {
+      name: date.toLocaleString('en-US', { month: 'long' }),
+      number: date.getMonth(),
+      daysInMonth: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(),
+    },
+    year: date.getFullYear()
+  })
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
   const todayTodos = useMemo(() => {
     return todos.filter(todo => {
       const todoDate = new Date(todo.dueDate);
-      return todoDate.toDateString() === todayDate.toDateString()
+      return todoDate.toDateString() === selectedDate.toDateString()
     })
-  }, [todayDate, todos])
-  console.log(todayTodos)
+  }, [selectedDate, todos])
 
   const intlDateConverter = new Intl.DateTimeFormat('en-US', {
     month: 'long',
@@ -29,13 +38,13 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
   })
 
   function handleNextDay() {
-    const nextDay = new Date(todayDate.getTime() + 24 * 60 * 60 * 1000);
-    setTodayDate(nextDay);
+    // const nextDay = new Date(todayDate.getTime() + 24 * 60 * 60 * 1000);
+    // setTodayDate(nextDay);
   }
 
   function handlePrevDay() {
-    const prevDay = new Date(todayDate.getTime() - 24 * 60 * 60 * 1000);
-    setTodayDate(prevDay);
+    // const prevDay = new Date(todayDate.getTime() - 24 * 60 * 60 * 1000);
+    // setTodayDate(prevDay);
   }
 
   function handleClickDate() {
@@ -49,8 +58,8 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
           <ChevronLeft className='h-6 w-6' />
         </button>
         <div className="relative" >
-          <button onClick={handleClickDate} className="font-semibold">{intlDateConverter.format(todayDate)}</button>
-          {isCalendarOpen && <Calendar />}
+          <button onClick={handleClickDate} className="font-semibold">{intlDateConverter.format(selectedDate)}</button>
+          {isCalendarOpen && <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} setIsCalendarOpen={setIsCalendarOpen} currentDate={currentDate} setCurrentDate={setCurrentDate} />}
         </div>
         <button onClick={handleNextDay} className="hover:bg-white focus-within:bg-white hover:bg-opacity-10 focus-within:bg-opacity-10 p-1.5 rounded-full shadow">
           <ChevronRight className='h-6 w-6' />
