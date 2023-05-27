@@ -117,10 +117,10 @@ export function Calendar() {
         <span className="font-[500] text-[15px]">{currentDate.year}</span>
       </div>
       <div className="grid grid-cols-7 place-items-center" >
-        {daysOfWeek.map(day => <span className="text-[12px] font-[500] text-[#A0AEC0]">{day}</span>)}
+        {daysOfWeek.map(weekDay => <span key={weekDay} className="text-[12px] font-[500] text-[#A0AEC0]">{weekDay}</span>)}
       </div>
       <div className="grid w-full h-[200px] grid-cols-7 place-items-center mt-2">
-        {daysWithStrings.map(day => <button onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
+        {daysWithStrings.map(day => <button key={day} onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
       </div>
     </div>
   )
