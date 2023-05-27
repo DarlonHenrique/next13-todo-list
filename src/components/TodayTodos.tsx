@@ -38,13 +38,13 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
   })
 
   function handleNextDay() {
-    // const nextDay = new Date(todayDate.getTime() + 24 * 60 * 60 * 1000);
-    // setTodayDate(nextDay);
+    const nextDay = new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000);
+    setSelectedDate(nextDay);
   }
 
   function handlePrevDay() {
-    // const prevDay = new Date(todayDate.getTime() - 24 * 60 * 60 * 1000);
-    // setTodayDate(prevDay);
+    const prevDay = new Date(selectedDate.getTime() - 24 * 60 * 60 * 1000);
+    setSelectedDate(prevDay);
   }
 
   function handleClickDate() {
