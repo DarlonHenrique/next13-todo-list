@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ChevronLeft } from "../../public/icons/chevron-left"
 import { ChevronRight } from "../../public/icons/chevron-right"
 
@@ -29,8 +29,14 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
     const newYear = currentDate.month.number === 11 && direction === 'forward' ? currentDate.year + 1 : currentDate.month.number === 0 && direction === 'back' ? currentDate.year - 1 : currentDate.year
     const newMonth = direction === 'back' ? currentDate.month.number - 1 : currentDate.month.number + 1
     const newDate = new Date(newYear, newMonth, 1)
+
+    // get the number of day now 
+    const todayIs = new Date().toLocaleDateString('en-US', {
+      day: "numeric",
+    })
+
     setCurrentDate({
-      day: newDate.getDay(),
+      day: Number(todayIs),
       month: {
         name: newDate.toLocaleString('en-US', { month: 'long' }),
         number: newDate.getMonth(),
@@ -41,7 +47,7 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
   }
 
   function generateArrayToRender(daysInMonth: number) {
-    let arrayToRender = []
+    let arrayToRender: (string | number)[] = []
     let stringsAtBegining = 0
 
     const weekday = new Date(currentDate.year, currentDate.month.number, 1)
@@ -49,6 +55,8 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
         weekday: "short",
       })
 
+    console.log(weekday)
+    
     switch (weekday) {
       case 'Mon':
         stringsAtBegining = 1
@@ -68,49 +76,46 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
       case 'Sat':
         stringsAtBegining = 6
         break;
-      case 'Sun':
-        stringsAtBegining = 0
-        break;
       default:
         break;
     }
 
-
     for (let index = 0; index < stringsAtBegining; index++) {
       arrayToRender.push('')
     }
+
     for (let index = 1; index <= daysInMonth; index++) {
       arrayToRender.push(index)
     }
-
+    
+    console.log(arrayToRender)
     return arrayToRender
   }
 
-  const daysWithStrings = generateArrayToRender(currentDate.month.daysInMonth as number)
-
   function handleClickDay(event: React.MouseEvent<HTMLButtonElement>) {
-    const activeClass = ' bg-gray-800 border border-primary text-white'
-
-    // get all days by the ref and remove the active class
-    const days = dayRef.current?.parentElement?.children
-    if (!days) return
-    for (let index = 0; index < days?.length; index++) {
-      const element = days?.item(index);
-      element?.classList.remove('bg-gray-800', 'border', 'border-primary', 'text-white')
-    }
-
-    event.currentTarget.className += activeClass
     const day = event.currentTarget.textContent
     const month = currentDate.month.number + 1
     const year = currentDate.year
     const date = new Date(`${month}/${day}/${year}`)
+    const activeClass = ' bg-gray-800 border border-primary text-white'
+    if (day === '') return
+    const days = dayRef.current?.parentElement?.children
+    if (!days) return
+    // get all days by the ref and remove the active class
+    for (let index = 0; index < days?.length; index++) {
+      const element = days?.item(index);
+      element?.classList.remove('bg-gray-800', 'border', 'border-primary', 'text-white')
+    }    
+
+    event.currentTarget.className += activeClass
+    
     setSelectedDate(date)
     setIsCalendarOpen(false)
   }
 
+  const daysWithStrings = generateArrayToRender(currentDate.month.daysInMonth || 0)
+
   const sameMonthAndYear = selectedDate.getMonth() === currentDate.month.number && selectedDate.getFullYear() === currentDate.year 
-  console.log(sameMonthAndYear)
-  console.log(selectedDate.getUTCDate())
 
   return (
     <div className="absolute  flex-col w-[350px] px-4 py-6 left-1/2 -translate-x-1/2 flex justify-center top-10 bg-background-secondary rounded">
@@ -130,7 +135,7 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
         {daysOfWeek.map(weekDay => <span key={weekDay} className="text-[12px] font-[500] text-[#A0AEC0]">{weekDay}</span>)}
       </div>
       <div className="grid w-full h-[200px] grid-cols-7 place-items-center mt-2">
-        {daysWithStrings.map(day => <button key={day} onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} ${sameMonthAndYear && selectedDate.getUTCDate() === day && 'bg-gray-800 border border-primary text-white'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
+        {daysWithStrings.map(day => <button key={Math.random()} onClick={handleClickDay} ref={dayRef} className={`${day != '' ? 'hover:bg-primary hover:bg-opacity-20 cursor-pointer' : 'cursor-default'} ${sameMonthAndYear && selectedDate.getUTCDate() === day && 'bg-gray-800 border border-primary text-white'} rounded-full aspect-square flex justify-center items-center w-auto h-[80%] text-[12px] font-[500] text-[#A0AEC0]`}>{day}</button>)}
       </div>
     </div>
   )
