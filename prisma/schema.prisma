@@ -16,9 +16,11 @@ model Todo {
   title String 
   complete Boolean
   dueDate DateTime @default(now())
+  category String @default("do") // create a custom type with "Do", "Schedule", "Delegate" and "Eliminate" as value
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
   @@map("todos")
 }
+

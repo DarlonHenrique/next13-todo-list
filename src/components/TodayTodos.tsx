@@ -51,6 +51,12 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
     setIsCalendarOpen(!isCalendarOpen)
   }
 
+  const todosInDo = todos.filter(todo => todo.category === 'do')
+  const todosInSchedule = todos.filter(todo => todo.category === 'schedule')
+  const todosInDelegate = todos.filter(todo => todo.category === 'delegate')
+  const todosInEliminate = todos.filter(todo => todo.category === 'eliminate')
+
+
   return (
     <div className="flex items-center justify-center container mx-auto flex-col mt-4">
       <section className="flex justify-between w-full items-center">
@@ -65,8 +71,31 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
           <ChevronRight className='h-6 w-6' />
         </button>
       </section>
-      <section className="w-full">
-        {todayTodos.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+      <section className="w-full grid sm:grid-cols-2 gap-4 mt-6">
+        {true && ( // todosInDo.length > 0
+          <div className="bg-green-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
+            <span className="font-semibold text-base">Do</span>
+            {todosInDo.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          </div>
+        )}
+        {true && ( // todosInDo.length > 0
+          <div className="bg-orange-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
+            <span className="font-semibold text-base">Schedule</span>
+            {todosInSchedule.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          </div>
+        )}
+        {true && ( // todosInDo.length > 0
+          <div className="bg-blue-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
+            <span className="font-semibold text-base">Delegate</span>
+            {todosInDelegate.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          </div>
+        )}
+        {true && ( // todosInDo.length > 0
+          <div className="bg-red-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
+            <span className="font-semibold text-base">Eliminate</span>
+            {todosInEliminate.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          </div>
+        )}
       </section>
     </div>
   )
