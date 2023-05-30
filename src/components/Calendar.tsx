@@ -50,12 +50,7 @@ export function Calendar({currentDate, setCurrentDate, setSelectedDate, setIsCal
     let arrayToRender: (string | number)[] = []
     let stringsAtBegining = 0
 
-    const weekday = new Date(currentDate.year, currentDate.month.number, 1)
-      .toLocaleDateString('en-US', {
-        weekday: "short",
-      })
-
-    console.log(weekday)
+    const weekday = new Date(currentDate.year, currentDate.month.number, 1).toLocaleDateString('en-US', { weekday: "short" })
     
     switch (weekday) {
       case 'Mon':
