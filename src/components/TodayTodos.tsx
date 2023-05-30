@@ -75,18 +75,22 @@ export function TodayTodos({ todos, handleDeleteTodo, toggleTodo }: TodayTodosPr
         <div className="bg-green-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
           <span className="font-semibold text-base">Do</span>
           {todosInDo.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          {todosInDo.length === 0 && <span className="text-sm text-gray-300">No tasks to do</span>}
         </div>
         <div className="bg-orange-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
           <span className="font-semibold text-base">Schedule</span>
           {todosInSchedule.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          {todosInSchedule.length === 0 && <span className="text-sm text-gray-300">No scheduled tasks</span>}
         </div>
         <div className="bg-blue-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
           <span className="font-semibold text-base">Delegate</span>
           {todosInDelegate.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          {todosInDelegate.length === 0 && <span className="text-sm text-gray-300">No delegated tasks</span>}
         </div>
         <div className="bg-red-600 bg-opacity-[0.53] px-3 py-2 rounded-md flex flex-col justify-center items-center" >
           <span className="font-semibold text-base">Eliminate</span>
           {todosInEliminate.map(todo => <TodoItem toggleTodo={toggleTodo} handleDeleteTodo={handleDeleteTodo} key={todo.id} {...todo} />)}
+          {todosInEliminate.length === 0 && <span className="text-sm text-gray-300">No eliminated tasks</span>}
         </div>
       </section>
     </div>
